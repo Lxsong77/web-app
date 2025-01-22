@@ -268,6 +268,14 @@ Text documents are often broken up into several sections and subsections. Each s
             value="2000-01-21"
             id="wd-text-fields-dob"/><br/>
 
+        <h4>Anchor tag</h4>
+        Please
+        <a href="https://www.lipsum.com" id="wd-lipsum">click here</a>
+        to get dummy text<br/>
+
+        Please
+        <a href="https://github.com/Lxsong77/web-app" id="wd-lipsum">click here</a>
+        to GitHub<br/>
 
       </div>                         
   );}                               
