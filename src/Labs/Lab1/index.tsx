@@ -1,6 +1,10 @@
 export default function Lab1() {        
     return (                        
-      <div id="wd-lab1">            
+      <div id="wd-lab1">
+        <div>
+        <p>Student Name: Xiaotong Li</p>
+        <a href="https://github.com/Lxsong77/web-app" id="wd-lipsum">Github Repository</a><br/> 
+        </div>            
         <h2>Lab 1</h2>
         <h3>HTML Examples</h3>
         <div id="wd-h-tag">
