@@ -1,9 +1,16 @@
 import "./index.css";
-import ForegroundColors from "./ForegroundColors"
-import BackgroundColors from "./BackgroundColors"
-import Borders from "./Borders"
-import Padding from "./Padding"
-import Margins from "./Margins"
+import ForegroundColors from "./ForegroundColors";
+import BackgroundColors from "./BackgroundColors";
+import Borders from "./Borders";
+import Padding from "./Padding";
+import Margins from "./Margins";
+import Corners from "./Corners";
+import Dimensions from "./Dimensions";
+import Positions from "./Positions";
+import Zindex from "./Zindex";
+import Float from "./Float";
+import GridLayout from "./GridLayout";
+import Flex from "./Flex";
 
 export default function Lab2() {
   return (
@@ -65,6 +72,13 @@ Here's another paragraph using a different ID and a different look and
       <Borders />
       <Padding />
       <Margins />
+      <Corners />
+      <Dimensions />
+      <Positions />
+      <Zindex />
+      <Float />
+      <GridLayout />
+      <Flex />
 
 
     </div>);}
