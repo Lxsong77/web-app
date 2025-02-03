@@ -3,6 +3,7 @@ export default function Lab1() {
       <div id="wd-lab1">
         <div>
         <p>Student Name: Xiaotong Li</p>
+        <p>Section: 01</p>
         <a href="https://github.com/Lxsong77/web-app" id="wd-lipsum">Github Repository</a><br/> 
         </div>            
         <h2>Lab 1</h2>
