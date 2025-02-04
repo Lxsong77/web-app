@@ -1,0 +1,26 @@
+/* Ensure both icons are in the same line and centered */
+.icon-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Add spacing and alignment */
+.icon-container svg {
+  vertical-align: middle;
+}
+
+/* Add spacing for the second icon */
+.assignment-icon {
+  color: #6c757d; /* Grey color for the icon */
+}
+
+/* Style for the assignment link */
+a.text-black {
+  color: black;
+}
+
+/* Ensure hover effects for the link */
+a.text-black:hover {
+  text-decoration: underline;
+  color: #000; /* Dark black hover color */
+}

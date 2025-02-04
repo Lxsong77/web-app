@@ -1,40 +1,88 @@
+import { ListGroup } from "react-bootstrap";
+import AssignmentsControls from "./AssignmentsControls";
+import { BsGripVertical } from "react-icons/bs";
+import AControlButtons from "./AControlButtons";
+import AssignmentsControlButtons from "./AssignmentsControlButtons";
+import "./Assignments.css";
+import AStatrControlButtons from "./AStartButtons";
+
 export default function Assignments() {
   return (
     <div id="wd-assignments">
-      <input placeholder="Search for Assignments"
-             id="wd-search-assignment" />
-      <button id="wd-add-assignment-group">+ Group</button>
-      <button id="wd-add-assignment">+ Assignment</button>
-      <h3 id="wd-assignments-title">
-        ASSIGNMENTS 40% of Total <button>+</button> </h3>
-      <ul id="wd-assignment-list">
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/A1"
-             className="wd-assignment-link" >
-            A1 - ENV + HTML
-          </a> 
-          <div className="wd-assignment-details">
-            Multiple Modules | <span className="wd-availability">Not available until May 6 at 12:00am</span> | <span className="wd-due">Due May 13 at 11:59pm</span> | <span className="wd-points">100 pts</span>
-          </div>
-        </li>
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/A2"
-              className="wd-assignment-link">
-              A2 - CSS + BOOTSTRAP
-            </a>
-            <div className="wd-assignment-details">
-              Multiple Modules | <span className="wd-availability">Not available until May 13 at 12:00am</span> | <span className="wd-due">Due May 20 at 11:59pm</span> | <span className="wd-points">100 pts</span>
+      <br />
+      <AssignmentsControls /><br /><br />
+      <ListGroup className="rounded-0" id="wd-assignments">
+          <ListGroup.Item className="wd-assignment p-0 mb-5 fs-5 border-gray">
+            <div className="wd-title d-flex justify-content-between align-items-center p-3 ps-2 bg-secondary"> 
+              <div>
+                <BsGripVertical className="me-2 fs-3" /> ASSIGNMENTS
+              </div>
+              <span className="ms-auto badge bg-secondary text-dark border border-black rounded-pill px-3 py-1">
+                40% of Total
+              </span>
+              <AssignmentsControlButtons className="ms-3" />
             </div>
-          </li>
-          <li className="wd-assignment-list-item">
-            <a href="#/Kambaz/Courses/1234/Assignments/A3"
-              className="wd-assignment-link" >
-              A3 - JAVASCRIPT + REACT
-            </a>
-            <div className="wd-assignment-details">
-              Multiple Modules | <span className="wd-availability">Not available until May 20 at 12:00am</span> | <span className="wd-due">Due May 27 at 11:59pm</span> | <span className="wd-points">100 pts</span>
-            </div>
-          </li>
-      </ul>
+            
+          <ListGroup className="wd-assignments rounded-0">
+            <ListGroup.Item className="wd-assignment p-3 ps-1 d-flex align-items-center">
+              <div className="d-flex flex-grow-1 justify-content-between align-items-center">
+                <AStatrControlButtons className="me-3"/>
+                  <div>
+                    <a
+                      href="#/Kambaz/Courses/1234/Assignments/A1"
+                      className="fw-bold text-black text-decoration-none"
+                    >
+                      A1
+                    </a>
+                    <br />
+                    <span className="text-danger">Multiple Modules</span> |{" "}
+                    <span className="fw-bold">Not available until </span> May 6 at 12:00am | Due May 13 at 11:59pm | 100 pts
+                    <br />
+                  </div>
+                <AControlButtons className="ms-3"/>
+              </div>
+            </ListGroup.Item>
+
+            <ListGroup.Item className="wd-assignment p-3 ps-1 d-flex align-items-center">
+              <div className="d-flex flex-grow-1 justify-content-between align-items-center">
+                <AStatrControlButtons className="me-3" />
+                <div>
+                  <a
+                    href="#/Kambaz/Courses/1234/Assignments/A2"
+                    className="fw-bold text-black text-decoration-none"
+                  >
+                    A2 
+                  </a>
+                  <br />
+                  <span className="text-danger">Multiple Modules</span> |{" "}
+                  <span className="fw-bold">Not available until </span> May 13 at 12:00am | Due May 20 at 11:59pm | 100 pts
+                  <br />
+                </div>
+                <AControlButtons className="ms-3" />
+              </div>
+            </ListGroup.Item>
+
+            <ListGroup.Item className="wd-assignment p-3 ps-1 d-flex align-items-center">
+              <div className="d-flex flex-grow-1 justify-content-between align-items-center">
+                <AStatrControlButtons className="me-3" />
+                <div>
+                  <a
+                    href="#/Kambaz/Courses/1234/Assignments/A3"
+                    className="fw-bold text-black text-decoration-none"
+                  >
+                    A3 
+                  </a>
+                  <br />
+                  <span className="text-danger">Multiple Modules</span> |{" "}
+                  <span className="fw-bold">Not available until </span> May 20 at 12:00am | Due May 27 at 11:59pm | 100 pts
+                  <br />
+                </div>
+                <AControlButtons className="ms-3" />
+              </div>
+            </ListGroup.Item>
+            
+          </ListGroup>
+        </ListGroup.Item>
+      </ListGroup>
     </div>
 );}
