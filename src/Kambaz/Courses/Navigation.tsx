@@ -1,13 +1,33 @@
+import { useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 
 export default function CourseNavigation() {
+  const [isNavVisible, setIsNavVisible] = useState(false);
+
   return (
+    <div>
+      <button
+          id="toggle-kambaz-nav"
+          className="btn btn-dark position-fixed top-0 end-0 m-2 d-md-none"
+          onClick={() => setIsNavVisible(!isNavVisible)}
+          aria-label="Toggle course navigation"
+          style={{
+            zIndex: 3, // Ensure it's above the black bar
+          }}
+        >
+        <AiOutlineMenu className="fs-2" />
+      </button>
+
     <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
       <NavLink
         to="/Kambaz/Courses/1234/Home"
         id="wd-course-home-link"
         className={({ isActive }) =>
-          `list-group-item ${isActive ? "active" : "text-danger"} border border-0`
+          `list-group-item ${isActive ? "active" : "text-danger"} border border-0
+            z-2 ${
+          isNavVisible ? "d-block" : "d-none"
+        } d-md-block`
         }
       >
         Home
@@ -75,6 +95,7 @@ export default function CourseNavigation() {
       >
         People
       </NavLink>
+    </div>
     </div>
   );
 }
