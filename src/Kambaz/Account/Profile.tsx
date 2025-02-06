@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Button }  from "react-bootstrap";
 
 export default function Profile() {
   return (
@@ -40,7 +40,8 @@ export default function Profile() {
           </Form.Select>
         </Form.Group>
 
-        <Button variant="danger" className="w-100 mt-3" as={Link} to="/Kambaz/Account/Signin">
+        <Button variant="danger" className="w-100 mt-3" 
+         as={Link as any} to="/Kambaz/Account/Signin">
           Sign out
         </Button>
       </Form>

@@ -1,5 +1,5 @@
 import { FaPlus } from "react-icons/fa6";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
+import { Button, FormControl } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 
 export default function AssignmentsControls() {
