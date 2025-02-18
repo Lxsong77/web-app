@@ -5,6 +5,8 @@ import IfElse from "./IfElse";
 import TernaryOperator from "./TernaryOperator";
 import ConditionalOutputIfElse from "./ConditionalOutputIfElse";
 import ConditionalOutputInline from "./ConditionalOutputInline";
+import LegacyFunctions from "./LegacyFunctions";
+import ArrowFunctions from "./ArrowFunctions";
 
 export default function Lab3() {
   return(
@@ -17,6 +19,8 @@ export default function Lab3() {
       <TernaryOperator/>
       <ConditionalOutputIfElse/>
       <ConditionalOutputInline/>
+      <LegacyFunctions/>
+      <ArrowFunctions/>
       
     </div>
   );
