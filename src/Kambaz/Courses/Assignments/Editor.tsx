@@ -1,15 +1,21 @@
+import { useParams, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
-
+import * as db from "../../Database";
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams<{ cid: string; aid: string }>();
+  const assignment = db.assignments.find((assignment) => assignment._id === aid);
+
+  if (!assignment) {
+    return <div>Assignment not found</div>;
+  }
+
   return (
     <div id="wd-assignments-editor">
-      
       <label htmlFor="wd-name">Assignment Name</label><br /><br />
-      
       <input 
         id="wd-name" 
-        value="A1" 
+        value={assignment.title} 
         style={{
           paddingLeft: "10px", 
           height: "45px", 
@@ -60,7 +66,7 @@ The Kanbas application should include a link to navigate back to the landing pag
             </td>
           </tr>
           <br />
-          <tr>
+          {/* <tr>
             <td style={{ width: "150px", whiteSpace: "nowrap", textAlign:"right", paddingRight: "10px" }}>
               <label htmlFor="wd-group">Assignment Group</label>
             </td>
@@ -73,8 +79,8 @@ The Kanbas application should include a link to navigate back to the landing pag
               </select>
             </td>
           </tr>
-          <br />
-          <tr>
+          <br /> */}
+          {/* <tr>
             <td style={{ width: "150px", whiteSpace: "nowrap", textAlign:"right", paddingRight: "10px" }}>
               <label htmlFor="wd-display-grade-as">Display Grade as</label>
             </td>
@@ -85,9 +91,9 @@ The Kanbas application should include a link to navigate back to the landing pag
               </select>
             </td>
           </tr>
-          <br />
+          <br /> */}
 
-          <tr style={{ width: "100%" }}>
+          {/* <tr style={{ width: "100%" }}>
             <td style={{ 
               width: "100px", 
               whiteSpace: "nowrap", 
@@ -135,7 +141,7 @@ The Kanbas application should include a link to navigate back to the landing pag
                   <input type="checkbox" /> File Uploads
                 </label>
             </fieldset>
-          </tr>
+          </tr> */}
 
           <tr style={{ width: "100%" }}>
             <td style={{ 
