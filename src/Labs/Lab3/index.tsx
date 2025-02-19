@@ -30,7 +30,7 @@ import Add from "./Add";
 import Square from "./Square";
 import Highlight from "./Highlight";
 import PathParameters from "./PathParameters";
-import AddPathParameters from "./AddPathParameters";
+
 
 
 export default function Lab3() {
@@ -76,11 +76,6 @@ export default function Lab3() {
      </Highlight>
      <hr />
       <PathParameters/>
-      <AddPathParameters/>
-
-
-  
-      
     </div>
   );
 }
