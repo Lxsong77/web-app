@@ -1,9 +1,9 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import * as db from "../../Database";
 
 export default function AssignmentEditor() {
-  const { cid, aid } = useParams<{ cid: string; aid: string }>();
+  const { aid } = useParams<{ cid: string; aid: string }>();
   const assignment = db.assignments.find((assignment) => assignment._id === aid);
 
   if (!assignment) {
