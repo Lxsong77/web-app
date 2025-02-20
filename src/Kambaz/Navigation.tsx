@@ -48,7 +48,7 @@ export default function KambazNavigation() {
         </div>
       </div>
       <ListGroup id="wd-kambaz-navigation" style={{ width: 120 }}
-        className={`rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black z-2 ${isNavVisible ? 'd-block' : 'd-none'}`}>
+        className={`rounded-0 position-fixed bottom-0 top-0 start-0 d-none d-md-block bg-black z-2 ${isNavVisible ? 'd-block' : 'd-none'}`}>
         <ListGroup.Item id="wd-neu-link" target="_blank" href="https://www.northeastern.edu/"
           action className="bg-black border-0 text-center">
           <img src="/images/NEU.png" width="75px" />
