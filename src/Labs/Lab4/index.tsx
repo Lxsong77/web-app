@@ -9,6 +9,7 @@ import DateStateVariable from "./DateStateVariables";
 import ObjectStateVariable from "./ObjectStateVariables";
 import ArrayStateVariable from "./ArrayStateVariables";
 import ParentStateComponent from "./ParentStateComponent";
+import ReduxExamples from "./ReduxExamples";
 
 
 export default function Lab4() {     
@@ -30,6 +31,7 @@ export default function Lab4() {
             <ObjectStateVariable />
             <ArrayStateVariable />
             <ParentStateComponent />
+            <ReduxExamples />
         </div>        
   );}                               
   
