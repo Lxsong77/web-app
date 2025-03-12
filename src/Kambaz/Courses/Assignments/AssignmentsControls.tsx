@@ -1,8 +1,13 @@
+import React from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Button, FormControl } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
 export default function AssignmentsControls() {
+  const navigate = useNavigate();
+  const { cid } = useParams<{ cid: string }>();
+
   return (
     <div id="wd-assignment-controls" className="d-flex justify-content-between align-items-center">
       {/* Search Input Field (Left) */}
@@ -32,7 +37,12 @@ export default function AssignmentsControls() {
         </Button>
 
         {/* Add Assignment Button */}
-        <Button variant="danger" size="lg" id="wd-add-assignment">
+        <Button
+          variant="danger"
+          size="lg"
+          id="wd-add-assignment"
+          onClick={() => navigate(`/Kambaz/Courses/${cid}/Assignments/new`)}
+        >
           <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
           Assignment
         </Button>

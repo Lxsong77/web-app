@@ -1,14 +1,30 @@
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
+import { addAssignment, updateAssignment } from "./reducer";
 import * as db from "../../Database";
 
 export default function AssignmentEditor() {
-  const { aid } = useParams<{ cid: string; aid: string }>();
-  const assignment = db.assignments.find((assignment) => assignment._id === aid);
+  const { cid, aid } = useParams<{ cid: string; aid: string }>();
+  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+  const existingAssignment = assignments.find((assignment: any) => assignment._id === aid);
+  const [assignment, setAssignment] = useState(existingAssignment || { title: "", description: "", points: 100, dueDate: "", availableFrom: "", availableUntil: "" });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  if (!assignment) {
-    return <div>Assignment not found</div>;
-  }
+  const saveAssignment = () => {
+    if (existingAssignment) {
+      dispatch(updateAssignment(assignment));
+    } else {
+      dispatch(addAssignment({ ...assignment, course: cid }));
+    }
+    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  };
+
+  const cancelEdit = () => {
+    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  };
 
   return (
     <div id="wd-assignments-editor">
@@ -16,6 +32,7 @@ export default function AssignmentEditor() {
       <input 
         id="wd-name" 
         value={assignment.title} 
+        onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
         style={{
           paddingLeft: "10px", 
           height: "45px", 
@@ -32,6 +49,8 @@ export default function AssignmentEditor() {
         id="wd-description"
         rows={15}
         cols={47}
+        value={assignment.description}
+        onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
         style={{
           paddingLeft: "10px",
           backgroundColor: "transparent",
@@ -41,19 +60,7 @@ export default function AssignmentEditor() {
           boxSizing: "border-box",
           whiteSpace: "pre-wrap", 
         }}
-        defaultValue={`The assignment is available online.
-
-Submit a link to the landing page of your Web application running on Netlify.
-
-The landing page should include the following:
-
-· Your full name and section
-· Links to each of the lab assignments
-· Link to the Kanbas application
-· Links to all relevant source code repositories
-
-The Kanbas application should include a link to navigate back to the landing page.`}
-    />
+      />
       <br /><br />
       <table style={{ width: "100%" }}>
         <tbody>
@@ -62,87 +69,16 @@ The Kanbas application should include a link to navigate back to the landing pag
               <label htmlFor="wd-points">Points</label>
             </td>
             <td style={{ width: "100%" }}>
-              <input id="wd-points" value={100} style={{ width: "100%", height: "45px" }} />
+              <input
+                id="wd-points"
+                value={assignment.points}
+                onChange={(e) => setAssignment({ ...assignment, points: e.target.value })}
+                style={{ width: "100%", height: "45px" }}
+              />
             </td>
           </tr>
           <br />
-          {/* <tr>
-            <td style={{ width: "150px", whiteSpace: "nowrap", textAlign:"right", paddingRight: "10px" }}>
-              <label htmlFor="wd-group">Assignment Group</label>
-            </td>
-            <td style={{ width: "100%" }}>
-              <select id="wd-group" style={{ width: "100%", height: "45px"  }}>
-                <option>ASSIGNMENTS</option>
-                <option>QUIZZES</option>
-                <option>EXAMS</option>
-                <option>PROJECT</option>
-              </select>
-            </td>
-          </tr>
-          <br /> */}
-          {/* <tr>
-            <td style={{ width: "150px", whiteSpace: "nowrap", textAlign:"right", paddingRight: "10px" }}>
-              <label htmlFor="wd-display-grade-as">Display Grade as</label>
-            </td>
-            <td style={{ width: "100%" }}>
-              <select id="wd-display-grade" style={{ width: "100%", height: "45px" }}>
-                <option>Percentage</option>
-                <option>Number</option>
-              </select>
-            </td>
-          </tr>
-          <br /> */}
-
-          {/* <tr style={{ width: "100%" }}>
-            <td style={{ 
-              width: "100px", 
-              whiteSpace: "nowrap", 
-              padding: "10px",
-              borderTopLeftRadius: "10px", 
-              borderBottomLeftRadius: "10px",
-              verticalAlign: "top", textAlign:"right", paddingRight: "10px"
-            }}>
-              <label htmlFor="wd-submission-type">Submission Type</label>
-            </td>
-            <fieldset style={{ 
-                width: "100%", 
-                marginTop: "10px", 
-                padding: "10px", 
-                border: "2px solid gray", 
-                borderRadius: "10px" 
-              }}>
-              <select id="wd-submission-type" 
-              style={{width: "100%",display: "block", 
-                      borderRadius: "5px", border: "1px solid gray", 
-                      height: "45px", boxSizing: "border-box" }}>
-                <option>Online</option>
-                <option>In person</option>
-              </select>
-              <br />
-                <legend style={{ fontSize: "20px", fontWeight: "bold" }}>
-                  Online Entry Options</legend>
-                <label><br />
-                  <input type="checkbox" /> Text Entry
-                </label>
-                <br /><br />
-                <label>
-                  <input type="checkbox" /> Website URL
-                </label>
-                <br /><br />
-                <label>
-                  <input type="checkbox" /> Media Recordings
-                </label>
-                <br /><br />
-                <label>
-                  <input type="checkbox" /> Student Annotation
-                </label>
-                <br /><br />
-                <label>
-                  <input type="checkbox" /> File Uploads
-                </label>
-            </fieldset>
-          </tr> */}
-
+          
           <tr style={{ width: "100%" }}>
             <td style={{ 
               width: "100px", 
@@ -177,7 +113,11 @@ The Kanbas application should include a link to navigate back to the landing pag
                 {/* Due Section */}
                 <div style={{ marginBottom: "10px" }}>
                   <label htmlFor="wd-due-date" style={{ display: "block" }}>Due</label>
-                  <input id="wd-due-date" type="date" value="2024-05-13" style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
+                  <input id="wd-due-date" 
+                          type="date" 
+                          value={assignment.dueDate} 
+                          onChange={(e) => setAssignment({ ...assignment, dueDate: e.target.value })}
+                          style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
                 </div>
 
                 {/* Available from and Until Section */}
@@ -196,12 +136,18 @@ The Kanbas application should include a link to navigate back to the landing pag
                     {/* Row for Inputs */}
                     <tr>
                       <td style={{ width: "50%", paddingRight: "10px" }}>
-                        <input id="wd-available-from" type="date" value="2024-05-06" 
-                          style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
+                        <input id="wd-available-from" 
+                                type="date" 
+                                value={assignment.availableFrom}
+                                onChange={(e) => setAssignment({ ...assignment, availableFrom: e.target.value })}
+                                style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
                       </td>
                       <td style={{ width: "50%" }}>
-                        <input id="wd-available-until" type="date" value="2024-05-20" 
-                          style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
+                        <input id="wd-available-until" 
+                                type="date" 
+                                value={assignment.availableUntil}
+                                onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}
+                                style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
                       </td>
                     </tr>
                   </tbody>
@@ -209,18 +155,19 @@ The Kanbas application should include a link to navigate back to the landing pag
 
               </fieldset>
           </tr>  
+
         </tbody>
       </table>
 
-
       <div id="wd-buttons" style={{ textAlign: 'right' }}>
-      <hr />
-      <Button variant="outline-secondary" size="lg" className="me-1" id="wd-add-assignment-group">
+        <hr />
+        <Button variant="outline-secondary" size="lg" className="me-1" onClick={cancelEdit} id="wd-cancel-assignment">
           Cancel
         </Button>
-      <Button variant="danger" size="lg" id="wd-add-assignment">
+        <Button variant="danger" size="lg" onClick={saveAssignment} id="wd-save-assignment">
           Save
         </Button>
       </div>
     </div>
-);}
+  );
+}
