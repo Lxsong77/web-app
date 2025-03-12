@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { MdDoNotDisturbAlt } from "react-icons/md";
 import { FaCheckCircle, FaBell, FaChartBar } from "react-icons/fa";
 import { BiImport } from "react-icons/bi";
@@ -7,6 +8,12 @@ import { IoMdNotifications } from "react-icons/io";
 import { Button } from "react-bootstrap";
 
 export default function CourseStatus() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  if (currentUser.role !== "FACULTY") {
+    return null;
+  }
+
   return (
     <div id="wd-course-status" style={{ width: "350px" }}>
       <h2>Course Status</h2>
