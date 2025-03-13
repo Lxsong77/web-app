@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import { addAssignment, updateAssignment } from "./reducer";
-import * as db from "../../Database";
+
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams<{ cid: string; aid: string }>();

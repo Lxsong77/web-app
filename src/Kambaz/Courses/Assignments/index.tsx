@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ListGroup, Modal, Button } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
-import { FaTrash } from "react-icons/fa";
 import AssignmentsControls from "./AssignmentsControls";
 import AControlButtons from "./AControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
@@ -15,7 +14,6 @@ export default function Assignments() {
   const { cid } = useParams<{ cid: string }>();
   const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
 
