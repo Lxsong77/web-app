@@ -1,66 +1,27 @@
-import { useState } from 'react';
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-
+import * as client from "./client";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "./reducer";
+import { FormControl } from "react-bootstrap";
 export default function Signup() {
+  const [user, setUser] = useState<any>({});
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [verifyPassword, setVerifyPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (password !== verifyPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-    // Add your signup logic here
-    navigate("/Kambaz/Dashboard");
+  const dispatch = useDispatch();
+  const signup = async () => {
+    const currentUser = await client.signup(user);
+    dispatch(setCurrentUser(currentUser));
+    navigate("/Kambaz/Account/Profile");
   };
-
   return (
-    <div id="wd-signup-screen" className="ms-5">
+    <div className="wd-signup-screen">
       <h1>Sign up</h1>
-      <Form onSubmit={handleSignup}>
-        <Form.Group controlId="wd-username">
-          <Form.Control
-            type="text"
-            placeholder="Username"
-            className="mb-2"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="wd-password">
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            className="mb-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group controlId="wd-verifypassword">
-          <Form.Control
-            type="password"
-            placeholder="Verify Password"
-            className="mb-2"
-            value={verifyPassword}
-            onChange={(e) => setVerifyPassword(e.target.value)}
-          />
-        </Form.Group>
-
-        {error && <div className="text-danger mb-2">{error}</div>}
-
-        <Button id="wd-signup-btn" type="submit" className="btn btn-primary w-100 mb-2">
-          Sign up
-        </Button>
-      </Form>
-
-      <Link to="/Kambaz/Account/Signin">Sign in</Link>
+      <FormControl value={user.username} onChange={(e) => setUser({ ...user, username: e.target.value })}
+             className="wd-username b-2" placeholder="username" />
+      <FormControl value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })}
+             className="wd-password mb-2" placeholder="password" type="password"/>
+      <button onClick={signup} className="wd-signup-btn btn btn-primary mb-2 w-100"> Sign up </button><br />
+      <Link to="/Kambaz/Account/Signin" className="wd-signin-link">Sign in</Link>
     </div>
   );
 }

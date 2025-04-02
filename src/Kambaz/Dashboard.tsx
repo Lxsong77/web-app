@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, Card, Col, FormControl, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import * as db from "./Database";
 
 export default function Dashboard({
   courses,
@@ -19,7 +18,6 @@ export default function Dashboard({
   updateCourse: () => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = db;
 
   return (
     <div id="wd-dashboard">
@@ -63,15 +61,7 @@ export default function Dashboard({
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses
-            .filter((course) =>
-              enrollments.some(
-                (enrollment) =>
-                  enrollment.user === currentUser._id &&
-                  enrollment.course === course._id
-              )
-            )
-            .map((course) => (
+          {courses.map((course) => (
               <Col
                 key={course._id}
                 className="wd-dashboard-course"
