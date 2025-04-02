@@ -1,7 +1,7 @@
 const assignment = {
     id: 1, title: "NodeJS Assignment",
     description: "Create a NodeJS server with ExpressJS",
-    due: "2021-10-10", completed: false, score: 0,
+    due: "2021-10-10", completed: true, score: 0,
   };
 const module = {
     id: "5610",
@@ -22,24 +22,17 @@ const module = {
       res.json(assignment);
     });
     // Route to update the score
-    app.put("/lab5/assignment/score", (req, res) => {
-      const { score } = req.body;
-      assignment.score = parseInt(score);
+    app.get("/lab5/assignment/score/:newScore", (req, res) => {
+      const { newScore } = req.params;
+      assignment.score = parseInt(newScore);
       res.json(assignment);
     });
 
     // Route to update the completed property
-    app.put("/lab5/assignment/completed", (req, res) => {
-        const { completed } = req.body;
-        assignment.completed = completed === "true";
-        res.json(assignment);
-    });
-
-    // Route to update the module's description
-    app.put("/lab5/module/description", (req, res) => {
-        const { description } = req.body;
-        module.description = description;
-        res.json(module);
+    app.get("/lab5/assignment/completed/:newCompleted", (req, res) => {
+      const { newCompleted } = req.params;
+      assignment.completed = newCompleted === "true";
+      res.json(assignment);
     });
 
     // Route to get the entire module object
@@ -57,6 +50,13 @@ const module = {
       module.name = newName;
       res.json(module);
     });
+
+    // Route to update the module's description
+    app.get("/lab5/module/description/:newDescription", (req, res) => {
+      const { newDescription } = req.params;
+      module.description = newDescription;
+      res.json(module);
+  });
   
   
   };
