@@ -30,10 +30,15 @@ export default function Modules() {
     await modulesClient.deleteModule(moduleId);
     dispatch(deleteModule(moduleId));
   };
+
   const saveModule = async (module: any) => {
-    await modulesClient.updateModule(module);
-    dispatch(updateModule(module));
-  };
+    try {
+        await modulesClient.updateModule(module);
+        dispatch(updateModule(module));
+    } catch (error) {
+        console.error("Failed to save module:", error);
+    }
+};
 
 
   useEffect(() => {
@@ -61,6 +66,7 @@ export default function Modules() {
                 {module.editing && (
                   <FormControl
                     className="w-50 d-inline-block"
+                    value={module.name}
                     onChange={(e) =>
                       dispatch(updateModule({ ...module, name: e.target.value }))
                     }
@@ -69,7 +75,7 @@ export default function Modules() {
                         saveModule({ ...module, editing: false });
                       }
                     }}
-                    defaultValue={module.name}
+                    
                   />
                 )}
                 {currentUser.role === "FACULTY" && (
