@@ -1,12 +1,11 @@
 
 import { FaPlus } from "react-icons/fa6";
 import { Button, FormControl } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
-export default function AssignmentsControls() {
+export default function AssignmentsControls({cid}: {cid: string}) {
   const navigate = useNavigate();
-  const { cid } = useParams<{ cid: string }>();
 
   return (
     <div id="wd-assignment-controls" className="d-flex justify-content-between align-items-center">
