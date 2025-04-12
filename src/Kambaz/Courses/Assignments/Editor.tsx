@@ -9,7 +9,15 @@ export default function AssignmentEditor() {
   const { cid, aid } = useParams<{ cid: string; aid: string }>();
   const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
   const existingAssignment = assignments.find((assignment: any) => assignment._id === aid);
-  const [assignment, setAssignment] = useState(existingAssignment || { title: "", description: "", points: 100, dueDate: "", availableFrom: "", availableUntil: "" });
+  const [assignment, setAssignment] = useState(existingAssignment || { 
+    course: cid,
+    title: "", 
+    description: "", 
+    points: 100, 
+    due: "", 
+    available: "", 
+    until: "" });
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -115,8 +123,8 @@ export default function AssignmentEditor() {
                   <label htmlFor="wd-due-date" style={{ display: "block" }}>Due</label>
                   <input id="wd-due-date" 
                           type="date" 
-                          value={assignment.dueDate} 
-                          onChange={(e) => setAssignment({ ...assignment, dueDate: e.target.value })}
+                          value={assignment.due} 
+                          onChange={(e) => setAssignment({ ...assignment, due: e.target.value })}
                           style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
                 </div>
 
@@ -138,15 +146,15 @@ export default function AssignmentEditor() {
                       <td style={{ width: "50%", paddingRight: "10px" }}>
                         <input id="wd-available-from" 
                                 type="date" 
-                                value={assignment.availableFrom}
-                                onChange={(e) => setAssignment({ ...assignment, availableFrom: e.target.value })}
+                                value={assignment.available}
+                                onChange={(e) => setAssignment({ ...assignment, available: e.target.value })}
                                 style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
                       </td>
                       <td style={{ width: "50%" }}>
                         <input id="wd-available-until" 
                                 type="date" 
-                                value={assignment.availableUntil}
-                                onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}
+                                value={assignment.until}
+                                onChange={(e) => setAssignment({ ...assignment, until: e.target.value })}
                                 style={{ width: "100%", borderRadius: "5px", border: "1px solid gray", height: "45px" }} />
                       </td>
                     </tr>

@@ -38,7 +38,7 @@ export default function Assignments() {
   return (
     <div id="wd-assignments">
       <br />
-      <AssignmentsControls /><br /><br />
+      <AssignmentsControls cid={cid!}/><br /><br />
       <ListGroup className="rounded-0" id="wd-assignments">
         <ListGroup.Item className="wd-assignment p-0 mb-5 fs-5 border-gray">
           <div className="wd-title d-flex justify-content-between align-items-center p-3 ps-2 bg-secondary"> 
@@ -67,8 +67,12 @@ export default function Assignments() {
                           {assignment.title}
                         </Link>
                         <br />
+
                         <span className="text-danger">Multiple Modules</span> |{" "}
-                        <span className="fw-bold">Not available until </span> May 6 at 12:00am | Due May 13 at 11:59pm | 100 pts
+                        <b>Available
+                                        from</b> {assignment.available} | <b>Until</b> {assignment.until} | <b>Due</b> {assignment.due} | {assignment.points} pts
+                                    
+                        
                         <br />
                       </div>
                       <div className="d-flex align-items-center">
