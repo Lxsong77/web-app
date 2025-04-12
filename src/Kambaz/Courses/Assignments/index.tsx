@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ListGroup, Modal, Button } from "react-bootstrap";
@@ -7,7 +7,9 @@ import AssignmentsControls from "./AssignmentsControls";
 import AControlButtons from "./AControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 import AStatrControlButtons from "./AStartButtons";
-import { deleteAssignment } from "./reducer";
+import {addAssignment, deleteAssignment, setAssignments, updateAssignment} from "./reducer";
+
+import * as client from "./client";
 import "./Assignments.css";
 
 export default function Assignments() {
@@ -16,6 +18,20 @@ export default function Assignments() {
   const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  const fetchAssignments = async () => {
+      const assignments = await client.findAssignmentsForCourse(cid as string);
+      dispatch(setAssignments(assignments));
+  };
+
+
+  const removeAssignment = async (moduleId: string) => {
+      await client.deleteAssignment(moduleId);
+      dispatch(deleteAssignment(moduleId));
+  };
 
   const handleDeleteClick = (assignment: any) => {
     setAssignmentToDelete(assignment);
@@ -99,6 +115,12 @@ export default function Assignments() {
           </Button>
         </Modal.Footer>
       </Modal>
+      <div className="col float-end">
+                                    <LessonControlButtons assignmentId={item._id}
+                                                          deleteAssignment={(assignmentId) => {
+                                                              removeAssignment(assignmentId)
+                                                          }}/>
+                                </div>
     </div>
   );
 }
