@@ -13,6 +13,7 @@ export default function PeopleDetails() {
   const [role, setRole] = useState("");
   const [editing, setEditing] = useState(false);
   const saveUser = async () => {
+    //console.log("Saving user with role:", role); 
     const [firstName, lastName] = name.split(" ");
     const updatedUser = { ...user, firstName, lastName, email, role };
     await client.updateUser(updatedUser);
@@ -75,7 +76,7 @@ export default function PeopleDetails() {
             {!editing && (
                 <div className="wd-email"
                     onClick={() => setEditing(true)}>
-                {   user.email} </div>)}
+                {user.email} </div>)}
             {user && editing && (
                 <FormControl className="w-50 wd-edit-email"
                     defaultValue={`${user.email} `}
@@ -89,7 +90,7 @@ export default function PeopleDetails() {
                 {user.role} </div>)}
             {user && editing && (
                 <select className="form-select w-50 wd-edit-role"
-                value={`${user.role} `}
+                value={role}
                 onChange={(e) => setRole(e.target.value)}>
                 <option value="STUDENT">Student</option>
                 <option value="TA">Teaching Assistant</option>

@@ -10,8 +10,7 @@ export const findAllUsers = async () => {
 };
 
 export const findUsersByRole = async (role: string) => {
-  const response = await
-    axios.get(`${USERS_API}?role=${role}`);
+  const response = await axios.get(`${USERS_API}?role=${role}`);
   return response.data;
 };
 
@@ -21,17 +20,22 @@ export const finUsersByPartialName = async (name: string) => {
 };
 
 export const findUserById = async (id: string) => {
-  const response = await axiosWithCredentials.get(`${USERS_API}/${id}`);
+  const response = await axios.get(`${USERS_API}/${id}`);
   return response.data;
 };
 
 export const deleteUser = async (userId: string) => {
-  const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}`);
+  const response = await axios.delete(`${USERS_API}/${userId}`);
   return response.data;
 }; 
 
 export const updateUser = async (user: any) => {
   const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
+  return response.data;
+};
+
+export const createUser = async (user: any) => {
+  const response = await axios.post(`${USERS_API}`, user);
   return response.data;
 };
 
