@@ -1,4 +1,3 @@
-import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "./GreenCheckmark";
 import { FaTrash } from "react-icons/fa";
 
