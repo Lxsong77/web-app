@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ListGroup, Modal, Button } from "react-bootstrap";
@@ -7,15 +7,28 @@ import AssignmentsControls from "./AssignmentsControls";
 import AControlButtons from "./AControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 import AStatrControlButtons from "./AStartButtons";
-import { deleteAssignment } from "./reducer";
+//import * as assignmentsClient from "./client";
+import * as coursesClient from "../client";
+import { deleteAssignment, setAssignments } from "./reducer";
 import "./Assignments.css";
+import { IoEllipsisVertical } from "react-icons/io5";
 
 export default function Assignments() {
   const { cid } = useParams<{ cid: string }>();
-  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
   const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
+  
+  
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+      fetchAssignments();
+  }, []);
 
   const handleDeleteClick = (assignment: any) => {
     setAssignmentToDelete(assignment);
@@ -38,8 +51,9 @@ export default function Assignments() {
   return (
     <div id="wd-assignments">
       <br />
-      <AssignmentsControls cid={cid!}/><br /><br />
+      <AssignmentsControls /><br /><br />
       <ListGroup className="rounded-0" id="wd-assignments">
+
         <ListGroup.Item className="wd-assignment p-0 mb-5 fs-5 border-gray">
           <div className="wd-title d-flex justify-content-between align-items-center p-3 ps-2 bg-secondary"> 
             <div>
@@ -50,11 +64,9 @@ export default function Assignments() {
             </span>
             <AssignmentsControlButtons className="ms-3" />
           </div>
-          
+     
           <ListGroup className="wd-assignments rounded-0">
-            {assignments
-              .filter((assignment: any) => assignment.course === cid)
-              .map((assignment: any) => (
+            {assignments.map((assignment: any) => (
                 <div key={assignment._id} className="border-start border-4 border-success w-100">
                   <ListGroup.Item className="wd-assignment p-3 ps-1 d-flex align-items-center">
                     <div className="d-flex flex-grow-1 justify-content-between align-items-center">
@@ -69,17 +81,19 @@ export default function Assignments() {
                         <br />
 
                         <span className="text-danger">Multiple Modules</span> |{" "}
-                        <b>Available
-                                        from</b> {assignment.available} | <b>Until</b> {assignment.until} | <b>Due</b> {assignment.due} | {assignment.points} pts
+                        <b>Available from</b> {assignment.available} | <b>Until</b> {assignment.until} | <b>Due</b> {assignment.due} | {assignment.points} pts
                                     
                         
                         <br />
                       </div>
                       <div className="d-flex align-items-center">
+                      {currentUser && (currentUser.role === "ADMIN" || currentUser.role === "FACULTY") && (<>
                         <AControlButtons
                           assignmentId={assignment._id}
                           deleteAssignment={() => handleDeleteClick(assignment)}
                         />
+                        </>)}
+                        <IoEllipsisVertical className="fs-4" />
                       </div>
                     </div>
                   </ListGroup.Item>

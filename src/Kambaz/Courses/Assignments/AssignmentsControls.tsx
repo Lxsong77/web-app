@@ -1,11 +1,13 @@
 
 import { FaPlus } from "react-icons/fa6";
 import { Button, FormControl } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
-export default function AssignmentsControls({cid}: {cid: string}) {
-  const navigate = useNavigate();
+export default function AssignmentsControls() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const { cid } = useParams();
 
   return (
     <div id="wd-assignment-controls" className="d-flex justify-content-between align-items-center">
@@ -28,24 +30,17 @@ export default function AssignmentsControls({cid}: {cid: string}) {
         />
       </div>
 
-      {/* Buttons (Right) */}
-      <div className="d-flex">
-        {/* Add Assignment Group Button */}
-        <Button variant="outline-secondary" size="lg" className="me-2" id="wd-add-assignment-group">
-          + Group
-        </Button>
-
-        {/* Add Assignment Button */}
-        <Button
-          variant="danger"
-          size="lg"
-          id="wd-add-assignment"
-          onClick={() => navigate(`/Kambaz/Courses/${cid}/Assignments/new`)}
-        >
-          <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-          Assignment
-        </Button>
+      <div className="col">
+          {currentUser && (currentUser.role === "ADMIN" || currentUser.role === "FACULTY") && (<>
+              <div className="d-flex justify-content-end">
+                  <Button className="mb-2 me-2" variant="secondary me-1">+ Group</Button>
+                  <Link className="btn bg-danger text-white mb-2 me-3" to={`/Kambaz/Courses/${cid}/Assignments/New`} >+ Assignment</Link>
+              </div>
+          </>)}
       </div>
+
+     
     </div>
   );
 }
+

@@ -11,7 +11,7 @@ export default function AControlButtons(
       */}
       <FaTrash className="text-danger me-2 mb-1" onClick={() => deleteAssignment(assignmentId)} />
       <GreenCheckmark />
-      <IoEllipsisVertical className="fs-4"/>
+
     </div>
   );
 }

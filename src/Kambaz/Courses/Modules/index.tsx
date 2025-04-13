@@ -69,7 +69,7 @@ export default function Modules() {
                         saveModule({ ...module, editing: false });
                       }
                     }}
-                    defaultValue={module.name}
+                    value={module.name}
                   />
                 )}
                 {currentUser.role === "FACULTY" && (
