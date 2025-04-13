@@ -29,5 +29,32 @@ export const createModuleForCourse = async (courseId: string, module: any) => {
     );
     return response.data;
   };
-  
+
+  export const findAssignmentsForCourse = async (courseId: string) => {
+    const response = await axios
+        .get(`${COURSES_API}/${courseId}/assignments`);
+    return response.data;
+};
+
+export const createAssignmentForCourse = async (courseId: string, assignment: any) => {
+    const response = await axios.post(
+        `${COURSES_API}/${courseId}/assignments`,
+        assignment
+    );
+    return response.data;
+};
+
+export const createEnrollment = async (enrollment: any) => {
+    const response = await axios.post(
+        `${COURSES_API}/enrollments`, enrollment
+    );
+    return response.data;
+};
+
+export const deleteEnrollment = async (userId: string, courseId: string) => {
+    const response = await axios.delete(
+        `${COURSES_API}/${userId}/${courseId}/enrollments`
+    );
+    return response.data;
+};
   

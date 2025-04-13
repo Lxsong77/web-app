@@ -68,7 +68,7 @@ export default function Modules() {
                         dispatch(updateModule({ ...module, editing: false }));
                       }
                     }}
-                    defaultValue={module.name}
+                    value={module.name}
                   />
                 )}
                 {currentUser.role === "FACULTY" && (
