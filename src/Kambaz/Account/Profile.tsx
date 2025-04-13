@@ -48,7 +48,7 @@ export default function Profile() {
           <select value={profile.role} id="wd-role" className="form-control mb-2"
                   onChange={(e) => setProfile({ ...profile, role:  e.target.value })}
                   >
-            <option value="USER">User</option>            <option value="ADMIN">Admin</option>
+            <option value="TA">TA</option>            <option value="ADMIN">Admin</option>
             <option value="FACULTY">Faculty</option>      <option value="STUDENT">Student</option>
           </select>
           <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>

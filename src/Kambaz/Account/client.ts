@@ -30,6 +30,11 @@ export const deleteUser = async (userId: string) => {
   return response.data;
 }; 
 
+export const updateUser = async (user: any) => {
+  const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
+  return response.data;
+};
+
 export const signin = async (credentials: any) => {
     const response = await axiosWithCredentials.post( `${USERS_API}/signin`, credentials );
     return response.data;
@@ -37,11 +42,6 @@ export const signin = async (credentials: any) => {
 
 export const signup = async (user: any) => {
     const response = await axiosWithCredentials.post(`${USERS_API}/signup`, user);
-    return response.data;
-  };
-  
-export const updateUser = async (user: any) => {
-    const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
     return response.data;
   };
   
