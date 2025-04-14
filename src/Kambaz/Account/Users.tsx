@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa";
 export default function Users() {
  const [users, setUsers] = useState<any[]>([]);
  const [role, setRole] = useState("");
- const [name, setName] = useState("");
+// Removed unused 'name' state
  const createUser = async () => {
   const user = await client.createUser({
     firstName: "New",
@@ -22,7 +22,7 @@ export default function Users() {
 };
 
  const filterUsersByName = async (name: string) => {
-    setName(name);
+    // Removed unused 'setName' call
     if (name) {
       const users = await client.finUsersByPartialName(name);
       setUsers(users);
