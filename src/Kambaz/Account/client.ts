@@ -1,19 +1,19 @@
 import axios from "axios";
 
-//const axiosWithCredentials = axios.create({ withCredentials: true });
-const axiosWithCredentials = axios.create({
-  withCredentials: true,
-  baseURL: process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:4000' 
-    : 'https://kanbas-react-web-app-candice.onrender.com'
-});
+const axiosWithCredentials = axios.create({ withCredentials: true });
+// const axiosWithCredentials = axios.create({
+//   withCredentials: true,
+//   baseURL: process.env.NODE_ENV === 'development' 
+//     ? 'http://localhost:4000' 
+//     : 'https://kanbas-react-web-app-candice.onrender.com'
+// });
 
 
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
 export const signin = async (credentials: any) => {
-    const response = await axiosWithCredentials.post( `${USERS_API}/signin`, credentials );
+    const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials );
     return response.data;
 }; 
 
