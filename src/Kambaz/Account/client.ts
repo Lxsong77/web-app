@@ -1,14 +1,6 @@
 import axios from "axios";
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
-// const axiosWithCredentials = axios.create({
-//   withCredentials: true,
-//   baseURL: process.env.NODE_ENV === 'development' 
-//     ? 'http://localhost:4000' 
-//     : 'https://kanbas-react-web-app-candice.onrender.com'
-// });
-
-
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
@@ -72,6 +64,24 @@ export const findMyCourses = async () => {
     return data;
   };
 
+export const findEnrollments = async () => {
+    const { data } = await axiosWithCredentials.get(`${USERS_API}/current/enrollments`);
+    return data;
+};
+
+export const enrollIntoCourse = async (userId: string, courseId: string) => {
+    const response = await axiosWithCredentials.post(`${USERS_API}/${userId}/courses/${courseId}`);
+    return response.data;
+};
+export const unenrollFromCourse = async (userId: string, courseId: string) => {
+    const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}/courses/${courseId}`);
+    return response.data;
+};
+
+export const findAttemptsForUser = async (userId: string) => {
+    const response = await axiosWithCredentials.get(`${USERS_API}/${userId}/attempts`);
+    return response.data;
+};
 export const createCourse = async (course: any) => {
     const { data } = await axiosWithCredentials.post(`${USERS_API}/current/courses`, course);
     return data;

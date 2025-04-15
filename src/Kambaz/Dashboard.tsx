@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Card, Col, FormControl, Row, Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { addEnrollment, deleteEnrollment } from "./Enrollment/reducer";
-import * as enrollmentClient from "./Enrollment/client";
+import { setEnrollments } from "./Enrollment/reducer";
+import * as userClient from "./Account/client";
+
 
 
 export default function Dashboard({
@@ -13,6 +14,9 @@ export default function Dashboard({
   addNewCourse,
   deleteCourse,
   updateCourse,
+  enrolling,
+  setEnrolling,
+  updateEnrollment,
 }: {
   courses: any[];
   course: any;
@@ -20,41 +24,40 @@ export default function Dashboard({
   addNewCourse: () => void;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
+  enrolling: boolean; 
+  setEnrolling: (enrolling: boolean) => void; 
+  updateEnrollment: (courseId: string, enrolled: boolean) => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showAllCourses, setShowAllCourses] = useState(false);
 
-  const handleEnrollToggle = async (courseId: string, isEnrolled: boolean) => {
-    if (isEnrolled) {
-      await enrollmentClient.createEnrollment(currentUser._id, courseId);
-      dispatch(addEnrollment({ user: currentUser._id, course: courseId }));
-    } else {
-      await enrollmentClient.deleteEnrollment(currentUser._id, courseId);
-      dispatch(deleteEnrollment({ user: currentUser._id, course: courseId }));
-    }
+  const fetchEnrollments = async () => {
+    let enrollments = [];
+    try {
+          enrollments = await userClient.findEnrollments();
+      } catch (error) {
+          console.error(error);
+      }
+      dispatch(setEnrollments(enrollments));
   };
 
-  const isStudent = currentUser.role === "STUDENT";
+  const toggleEnrolling = () => {
+      setEnrolling(!enrolling);
+  };
+
+  useEffect(() => {
+      fetchEnrollments();
+  }, [dispatch]);
 
 
   return (
     <Container id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      {isStudent && (
-        <Button
-          variant="primary"
-          className="float-end"
-          id="wd-toggle-enrollments"
-          onClick={() => setShowAllCourses(!showAllCourses)}
-        >
-          {showAllCourses ? "My Enrollments" : "All Courses"}
-        </Button>
-      )}
-      {!isStudent && (
+      {currentUser && (currentUser.role === "ADMIN" || currentUser.role === "FACULTY") && (
         <>
+        <h3>Course Editor</h3>
           <h5>
             New Course
             <button
@@ -86,17 +89,16 @@ export default function Dashboard({
           />
         </>
       )}
-      <h2 id="wd-dashboard-published">
-        Published Courses ({courses.length})
-      </h2>
+      <div className="d-flex">
+          <h2 id="wd-dashboard-published">
+              Published Courses ({courses.length})</h2>
+          <Button className="ms-5" onClick={() => { toggleEnrolling() }}>
+              {enrolling ? "My Courses" : "Enrollments"}</Button>
+      </div>
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses.map((course) => {
-              const isEnrolled = enrollments.some(
-                (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === course._id,
-              );
-            return (
+          {courses.map((course: any) => (
               <Col
                 key={course._id}
                 className="wd-dashboard-course"
@@ -122,27 +124,27 @@ export default function Dashboard({
                       >
                         {course.description}
                       </Card.Text>
-                      {isStudent && (
-                        <Button
-                          variant={isEnrolled ? "danger" : "success"}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            handleEnrollToggle(course._id, isEnrolled);
-                          }}
-                          className="float-end"
-                          id={isEnrolled ? "wd-unenroll-course-click" : "wd-enroll-course-click"}
-                        >
-                          {isEnrolled ? "Unenroll" : "Enroll"}
-                        </Button>
+                      {enrolling && (
+                          <Button
+                              onClick={(event) => {
+                                  event.preventDefault();
+                                  updateEnrollment(course._id, !course.enrolled);
+                              }}
+                              className="me-2 mb-2"
+                          >
+                              {course.enrolled ? "Unenroll" : "Enroll"}
+                          </Button>
                       )}
-                      {!isStudent && (
-                        <>
+                      {currentUser && (currentUser.role === "ADMIN" || 
+                          currentUser.role === "FACULTY") && (<>
                           <Button variant="primary" onClick={
-                            (event) => {
-                              event.preventDefault();
-                              navigate(`/Kambaz/Courses/${course._id}/Home`);
-                            }
-                          } className="float-end" id="wd-go-course-click" style={{ marginLeft: "5px" }
+                              (event) => {
+                                event.preventDefault();
+                                navigate(`/Kambaz/Courses/${course._id}/Home`);
+                              }} 
+                              className="float-end" 
+                              id="wd-go-course-click" 
+                              style={{ marginLeft: "5px" }
                           }>Go</Button>
                           <button
                             onClick={(event) => {
@@ -169,11 +171,10 @@ export default function Dashboard({
                     </Card.Body>
                   </Link>
                 </Card>
-              </Col>
-            );
-          })} 
+              </Col>))}
         </Row>
       </div>
     </Container>
   );
 }
+
