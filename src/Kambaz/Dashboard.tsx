@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
-import { Button, Card, Col, FormControl, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Card, Col, FormControl, Row, Container } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { addEnrollment, deleteEnrollment } from "./Enrollment/reducer";
+import * as enrollmentClient from "./Enrollment/client";
+
 
 export default function Dashboard({
   courses,
@@ -18,11 +22,38 @@ export default function Dashboard({
   updateCourse: () => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showAllCourses, setShowAllCourses] = useState(false);
+
+  const handleEnrollToggle = async (courseId: string, isEnrolled: boolean) => {
+    if (isEnrolled) {
+      await enrollmentClient.createEnrollment(currentUser._id, courseId);
+      dispatch(addEnrollment({ user: currentUser._id, course: courseId }));
+    } else {
+      await enrollmentClient.deleteEnrollment(currentUser._id, courseId);
+      dispatch(deleteEnrollment({ user: currentUser._id, course: courseId }));
+    }
+  };
+
+  const isStudent = currentUser.role === "STUDENT";
+
 
   return (
-    <div id="wd-dashboard">
+    <Container id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      {currentUser.role === "FACULTY" && (
+      {isStudent && (
+        <Button
+          variant="primary"
+          className="float-end"
+          id="wd-toggle-enrollments"
+          onClick={() => setShowAllCourses(!showAllCourses)}
+        >
+          {showAllCourses ? "My Enrollments" : "All Courses"}
+        </Button>
+      )}
+      {!isStudent && (
         <>
           <h5>
             New Course
@@ -35,8 +66,8 @@ export default function Dashboard({
             </button>
             <button
               className="btn btn-warning float-end me-2"
-              onClick={updateCourse}
               id="wd-update-course-click"
+              onClick={updateCourse}
             >
               Update
             </button>
@@ -61,12 +92,15 @@ export default function Dashboard({
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses.map((course) => (
+          {courses.map((course) => {
+              const isEnrolled = enrollments.some(
+                (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === course._id,
+              );
+            return (
               <Col
                 key={course._id}
                 className="wd-dashboard-course"
-                style={{ width: "300px" }}
-              >
+                style={{ width: "300px" }}>
                 <Card>
                   <Link
                     to={`/Kambaz/Courses/${course._id}/Home`}
@@ -88,9 +122,28 @@ export default function Dashboard({
                       >
                         {course.description}
                       </Card.Text>
-                      <Button variant="primary"> Go </Button>
-                      {currentUser.role === "FACULTY" && (
+                      {isStudent && (
+                        <Button
+                          variant={isEnrolled ? "danger" : "success"}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            handleEnrollToggle(course._id, isEnrolled);
+                          }}
+                          className="float-end"
+                          id={isEnrolled ? "wd-unenroll-course-click" : "wd-enroll-course-click"}
+                        >
+                          {isEnrolled ? "Unenroll" : "Enroll"}
+                        </Button>
+                      )}
+                      {!isStudent && (
                         <>
+                          <Button variant="primary" onClick={
+                            (event) => {
+                              event.preventDefault();
+                              navigate(`/Kambaz/Courses/${course._id}/Home`);
+                            }
+                          } className="float-end" id="wd-go-course-click" style={{ marginLeft: "5px" }
+                          }>Go</Button>
                           <button
                             onClick={(event) => {
                               event.preventDefault();
@@ -117,9 +170,10 @@ export default function Dashboard({
                   </Link>
                 </Card>
               </Col>
-            ))}
+            );
+          })} 
         </Row>
       </div>
-    </div>
+    </Container>
   );
 }
