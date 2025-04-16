@@ -64,7 +64,7 @@ const fetchAllCourses = async () => {
   };
 
 
-useEffect(() => {
+  useEffect(() => {
     if (enrolling) {
         fetchAllCourses();
     } else {
