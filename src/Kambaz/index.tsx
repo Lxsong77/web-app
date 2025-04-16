@@ -83,7 +83,7 @@ const fetchAllCourses = async () => {
   };
 
   const deleteCourse = async (courseId: string) => {
-    await courseClient.deleteCourse(courseId);
+    const status = await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
 
