@@ -4,17 +4,20 @@ import { Button, Dropdown } from "react-bootstrap";
 import ModuleEditor from "./ModuleEditor";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { MdNotInterested } from "react-icons/md";
 
 export default function ModulesControls(
   { moduleName, setModuleName, addModule }:
-  { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }
+  { moduleName: string; 
+    setModuleName: (title: string) => void; 
+    addModule: () => void; }
 ) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-  if (currentUser.role !== "FACULTY") {
+  if (currentUser.role === "STUDENT" || currentUser.role === "TA") {
     return null;
   }
 
@@ -26,7 +29,6 @@ export default function ModulesControls(
       </Button>
       <ModuleEditor show={show} handleClose={handleClose} dialogTitle="Add Module"
         moduleName={moduleName} setModuleName={setModuleName} addModule={addModule} />
-
       <Dropdown className="float-end me-2">
         <Dropdown.Toggle variant="secondary" size="lg" id="wd-publish-all-btn">
           <GreenCheckmark /> Publish All
@@ -42,10 +44,10 @@ export default function ModulesControls(
             <GreenCheckmark /> Publish modules only
           </Dropdown.Item>
           <Dropdown.Item id="wd-unpublish-all-modules-and-items">
-            Unpublish all modules and items
+            <MdNotInterested />Unpublish all modules and items
           </Dropdown.Item>
           <Dropdown.Item id="wd-unpublish-modules-only">
-            Unpublish modules only
+            <MdNotInterested />Unpublish modules only
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

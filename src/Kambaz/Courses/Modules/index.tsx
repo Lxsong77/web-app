@@ -46,6 +46,10 @@ export default function Modules() {
     fetchModulesForCourse();
   }, [cid]);
 
+  useEffect(() => {
+    fetchModulesForCourse();
+  }, []);
+
   const addModuleHandler = async () => {
     const newModule = await coursesClient.createModuleForCourse(cid!, {
       name: moduleName,
@@ -67,14 +71,12 @@ export default function Modules() {
 
   return (
     <div className="wd-modules">
-      {currentUser.role === "FACULTY" && (
         <ModulesControls
           addModule={addModuleHandler}
           moduleName={moduleName}
           setModuleName={setModuleName}
           
         />
-      )}
       <br /><br /><br /><br />
       <ListGroup id="wd-modules" className="rounded-0">
         {modules.map((module: any) => (
@@ -95,24 +97,26 @@ export default function Modules() {
                     value={module.name}
                   />
                 )}
-                {currentUser.role === "FACULTY" && (
-                  <ModuleControlButtons
-                    moduleId={module._id}
-                    deleteModule={(moduleId) => deleteModuleHandler(moduleId)}
-                    editModule={(moduleId) => dispatch(editModule(moduleId))}
-                  />
-                )}
-              </div>
-              {module.lessons && (
-                <ListGroup className="wd-lessons rounded-0">
-                  {module.lessons.map((lesson: any) => (
-                    <ListGroup.Item key={lesson._id} className="wd-lesson p-3 ps-1">
-                      <BsGripVertical className="me-2 fs-3" /> {lesson.name} 
-                      {currentUser.role === "FACULTY" && <LessonControlButtons />}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              )}
+            {currentUser && (currentUser.role === "ADMIN" || 
+                currentUser.role === "FACULTY") && (<>
+                <ModuleControlButtons
+                  moduleId={module._id}
+                  deleteModule={(moduleId) => deleteModuleHandler(moduleId)}
+                  editModule={(moduleId) => dispatch(editModule(moduleId))}
+                />
+            </>)}
+          </div>
+          {module.lessons && (
+            <ListGroup className="wd-lessons rounded-0">
+              {module.lessons.map((lesson: any) => (
+                <ListGroup.Item key={lesson._id} className="wd-lesson p-3 ps-1">
+                  <BsGripVertical className="me-2 fs-3" /> {lesson.name} 
+                  {currentUser && (currentUser.role === "ADMIN" || 
+                    currentUser.role === "FACULTY") && 
+                    <LessonControlButtons />}
+                </ListGroup.Item>))}
+            </ListGroup>
+          )}
             </ListGroup.Item>
           ))}
       </ListGroup>
