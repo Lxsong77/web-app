@@ -18,33 +18,62 @@ export default function Kambaz() {
 
   const [enrolling, setEnrolling] = useState<boolean>(false);
 
-  const fetchMyCourses = async () => {
+
+
+ const findCoursesForUser = async () => {
     try {
-        const courses = await userClient.findMyCourses(currentUser._id);
-        setCourses(courses);
+      const courses = await userClient.findCoursesForUser(currentUser._id);
+      setCourses(courses);
     } catch (error) {
-        console.error(error);
+      console.error(error);
+    }
+  };
+  const fetchCourses = async () => {
+    try {
+      const allCourses = await courseClient.fetchAllCourses();
+      const enrolledCourses = await userClient.findCoursesForUser(
+        currentUser._id
+      );
+      const courses = allCourses.map((course: any) => {
+        if (enrolledCourses.find((c: any) => c._id === course._id)) {
+          return { ...course, enrolled: true };
+        } else {
+          return course;
+        }
+      });
+      setCourses(courses);
+    } catch (error) {
+      console.error(error);
     }
   };
 
-const fetchAllCourses = async () => {
-    try {
-        const allCourses = await courseClient.fetchAllCourses();
-        const enrolledCourses = await userClient.findMyCourses(
-            currentUser._id
-        );
-        const courses = allCourses.map((course: any) => {
-            if (enrolledCourses.find((c: any) => c._id === course._id)) {
-                return { ...course, enrolled: true };
-            } else {
-                return course;
-            }
-        });
-        setCourses(courses);
-    } catch (error) {
-        console.error(error);
-    }
-  };
+//   const fetchMyCourses = async () => {
+//     try {
+//         const courses = await userClient.findMyCourses(currentUser._id);
+//         setCourses(courses);
+//     } catch (error) {
+//         console.error(error);
+//     }
+//   };
+
+// const fetchAllCourses = async () => {
+//     try {
+//         const allCourses = await courseClient.fetchAllCourses();
+//         const enrolledCourses = await userClient.findMyCourses(
+//             currentUser._id
+//         );
+//         const courses = allCourses.map((course: any) => {
+//             if (enrolledCourses.find((c: any) => c._id === course._id)) {
+//                 return { ...course, enrolled: true };
+//             } else {
+//                 return course;
+//             }
+//         });
+//         setCourses(courses);
+//     } catch (error) {
+//         console.error(error);
+//     }
+//   };
   
   const updateEnrollment = async (courseId: string, enrolled: boolean) => {
       if (enrolled) {
@@ -66,9 +95,9 @@ const fetchAllCourses = async () => {
 
   useEffect(() => {
     if (enrolling) {
-        fetchAllCourses();
+        fetchCourses();
     } else {
-        fetchMyCourses();
+        findCoursesForUser();
     }
   }, [currentUser, enrolling]);
 
@@ -83,7 +112,7 @@ const fetchAllCourses = async () => {
   };
 
   const deleteCourse = async (courseId: string) => {
-    const status = await courseClient.deleteCourse(courseId);
+    await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
 
