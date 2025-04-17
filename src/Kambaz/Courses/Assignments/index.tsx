@@ -106,7 +106,7 @@ export default function Assignments() {
                         <span className="text-danger">Multiple Modules</span> |{" "}
                         <b>Available from</b> {formatDate(assignment.available)} |{" "}
                         <b>Until</b> {formatDate(assignment.until)} |{" "} 
-                        <b>Due</b> {formatDate(assignment.due)} | 
+                        <b>Due</b> {assignment.due} | 
                         {assignment.points} pts
                                     
                         
