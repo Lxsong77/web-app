@@ -7,7 +7,7 @@ import AssignmentsControls from "./AssignmentsControls";
 import AControlButtons from "./AControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 import AStatrControlButtons from "./AStartButtons";
-//import * as assignmentsClient from "./client";
+import * as assignmentsClient from "./client";
 import * as coursesClient from "../client";
 import { deleteAssignment, setAssignments } from "./reducer";
 import "./Assignments.css";
@@ -37,15 +37,38 @@ export default function Assignments() {
 
   const handleDeleteConfirm = () => {
     if (assignmentToDelete) {
-      dispatch(deleteAssignment(assignmentToDelete._id));
-      setAssignmentToDelete(null);
-      setShowDeleteModal(false);
+      deleteAssignmentHandler(assignmentToDelete);
+      // dispatch(deleteAssignment(assignmentToDelete._id));
+      // setAssignmentToDelete(null);
+      // setShowDeleteModal(false);
     }
   };
 
   const handleDeleteCancel = () => {
     setAssignmentToDelete(null);
     setShowDeleteModal(false);
+  };
+
+  const deleteAssignmentHandler = async (assignmentId: string) => {
+    await assignmentsClient.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+    setShowDeleteModal(false); 
+  };
+
+
+  const fetchAssignmentsForCourse = async () => {
+      const assignments = await coursesClient.findAssignmentsForCourse(cid!);
+      dispatch(setAssignments(assignments));
+  };
+
+  useEffect(() => {
+      fetchAssignmentsForCourse();
+  }, [cid]);
+
+  const formatDate = (isoDate: string | null | undefined) => {
+    if (!isoDate) return "N/A"; // Handle null or undefined dates
+    const date = new Date(isoDate);
+    return date.toISOString().split("T")[0];
   };
 
   return (
@@ -81,7 +104,10 @@ export default function Assignments() {
                         <br />
 
                         <span className="text-danger">Multiple Modules</span> |{" "}
-                        <b>Available from</b> {assignment.available} | <b>Until</b> {assignment.until} | <b>Due</b> {assignment.due} | {assignment.points} pts
+                        <b>Available from</b> {formatDate(assignment.available)} |{" "}
+                        <b>Until</b> {formatDate(assignment.until)} |{" "} 
+                        <b>Due</b> {formatDate(assignment.due)} | 
+                        {assignment.points} pts
                                     
                         
                         <br />
@@ -90,7 +116,7 @@ export default function Assignments() {
                       {currentUser && (currentUser.role === "ADMIN" || currentUser.role === "FACULTY") && (<>
                         <AControlButtons
                           assignmentId={assignment._id}
-                          deleteAssignment={() => handleDeleteClick(assignment)}
+                          deleteAssignment={() => handleDeleteClick(assignment._id)}
                         />
                         </>)}
                         <IoEllipsisVertical className="fs-4" />
